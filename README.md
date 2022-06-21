@@ -7,7 +7,7 @@ This package is compatible with ROS Noetic version (Ubuntu 20.04). Existing vers
 # Download and Compiling #
 ```
 $ cd <catkin_ws>/src
-$ git clone git@github.com:alceu-brettas/sjtu-drone.git
+$ git clone https://github.com/alceu-brettas/sjtu-drone.git
 $ cd <catkin_ws>
 $ catkin build
 ```
