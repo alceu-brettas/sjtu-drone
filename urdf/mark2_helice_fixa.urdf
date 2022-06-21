@@ -1,0 +1,334 @@
+<?xml version="1.0" ?>
+<robot name="mark2"> 
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.015753 0.016964 -0.012343"
+        rpy="0 0 0" />
+      <mass
+        value="1.3619" />
+      <inertia
+        ixx="0.0062425"
+        ixy="-6.4951E-06"
+        ixz="2.029E-07"
+        iyy="0.005561"
+        iyz="-3.8208E-07"
+        izz="0.010065" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 -1.570796327" />
+      <geometry>
+        <mesh
+          filename="package://mark2/meshes/Mark_2.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.11765 0.11765 0.11765 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.570796327 0 -1.570796327" />
+      <geometry>
+        <mesh
+          filename="package://mark2/meshes/helice_fixa/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo>
+    <plugin name='simple_drone' filename='libplugin_drone.so'>
+        <bodyName>base_link</bodyName>
+        <imuTopic>/drone/imu</imuTopic>
+        <rollpitchProportionalGain>10.0</rollpitchProportionalGain>
+        <rollpitchDifferentialGain>5.0</rollpitchDifferentialGain>
+        <rollpitchLimit>0.5</rollpitchLimit>
+        <yawProportionalGain>2.0</yawProportionalGain>
+        <yawDifferentialGain>1.0</yawDifferentialGain>
+        <yawLimit>1.5</yawLimit>
+        <velocityXYProportionalGain>5.0</velocityXYProportionalGain>
+        <velocityXYDifferentialGain>2.3</velocityXYDifferentialGain>
+        <velocityXYLimit>2</velocityXYLimit>
+        <velocityZProportionalGain>5.0</velocityZProportionalGain>
+        <velocityZDifferentialGain>1.0</velocityZDifferentialGain>
+        <velocityZLimit>-1</velocityZLimit>
+        <positionXYProportionalGain>1.1</positionXYProportionalGain>
+        <positionXYDifferentialGain>0.0</positionXYDifferentialGain>
+        <positionXYIntegralGain>0.0</positionXYIntegralGain>
+        <positionXYLimit>5</positionXYLimit>
+        <positionZProportionalGain>1.0</positionZProportionalGain>
+        <positionZDifferentialGain>0.2</positionZDifferentialGain>
+        <positionZLimit>-1</positionZLimit>
+        <maxForce>30</maxForce>
+        <motionSmallNoise>0.05</motionSmallNoise>
+        <motionDriftNoise>0.03</motionDriftNoise>
+        <motionDriftNoiseTime>5.0</motionDriftNoiseTime>
+    </plugin>
+  </gazebo>
+
+  <!-- IMU -->
+  <joint name="imu_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+
+  <link name="imu_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.02 0.02 0.005"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.02 0.02 0.005"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>mark2/imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+  
+  <!-- Sonar sensor in 100fps --> 
+    <joint name="sonar_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <origin xyz="0.056500 0.014700 -0.08" rpy="0 1.570796327 0"/>
+      <parent link="base_link"/>
+      <child link="sonar_link"/>
+    </joint>
+  
+    <link name="sonar_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+      <box size="0.005 0.005 0.005"/>
+        </geometry>
+      </collision>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+      <box size="0.005 0.005 0.005"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+
+    <gazebo reference="sonar_link">
+      <sensor type="ray" name="sonar"> 
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>3</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.34906585</min_angle>
+              <max_angle> 0.34906585</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>3</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.34906585</min_angle>
+              <max_angle> 0.34906585</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>0.03</min>
+            <max>3.0</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+
+        <plugin name="gazebo_ros_sonar_controller" filename="libhector_gazebo_ros_sonar_hector.so">
+          <gaussianNoise>0.005</gaussianNoise>
+          <topicName>mark2/sonar_height</topicName>
+          <frameId>sonar_link</frameId>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+
+  <!-- Frontward looking camera -->
+  <joint name="cam1_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0.056500 0.014700 -0.08" rpy="0 0 0"/> 
+    <parent link="base_link"/>
+    <child link="cam1_link"/>
+  </joint>
+
+  <link name="cam1_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.015 0.015 0.02"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.015 0.015 0.02"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <gazebo reference="cam1_link">
+    <sensor name="front_camera" type="camera">
+      <camera>
+        <horizontal_fov>1.570796326794</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.005</stddev>
+        </noise>
+      </camera>
+      
+      <update_rate>30</update_rate>
+      <!-- visualize>true</visualize -->
+
+      <plugin name="frontcam" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>mark2/front_cam</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>front_cam</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+  <!-- downward looking camera -->
+  <joint name="cam2_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0.016500 0.014700 -0.08" rpy="0 1.570796327 0"/>
+    <parent link="base_link"/>
+    <child link="cam2_link"/>
+  </joint>
+
+  <link name="cam2_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.570796327 0"/>
+      <geometry>
+    <box size="0.015 0.015 0.02"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.570796327 0"/>
+      <geometry>
+    <box size="0.015 0.015 0.02"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <gazebo reference="cam2_link">
+    <sensor name="down_camera" type="camera">
+      <camera>
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>1200</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.005</stddev>
+        </noise>
+      </camera>
+      
+      <update_rate>30</update_rate>
+      <!-- visualize>true</visualize -->
+
+      <plugin name="downcam" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>mark2/down_cam</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>down_cam</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+</robot>
