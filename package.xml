@@ -2,7 +2,7 @@
 <package>
   <name>sjtu-drone</name>
   <version>0.0.0</version>
-  <description>The Mark II package</description>
+  <description>The Sjtu drone package</description>
 
   <maintainer email="dpzou@sjtu.edu.cn">dpzou</maintainer>
 

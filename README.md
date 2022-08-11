@@ -20,7 +20,7 @@ The simplest way is calling after you have built the workspace successfully.
 ```
 $ cd <where you check out the code>
 $ source devel/setup.bash
-$ roslaunch sjtu_drone simple.launch
+$ roslaunch sjtu-drone sjtu.launch
 ```
 # Running with keyboard
 In second terminal:
