@@ -31,11 +31,6 @@ In second terminal, if the controller don't open:
 $ rosrun sjtu-drone drone_keyboard
 ```
 
-```
-$ roslaunch sjtu-drone sjtu.launch
-```
-
-
 # Read sensor data from ROS topics #
 One can use [rqt_gui](http://wiki.ros.org/rqt_gui) to have an extensive amount of utilities for topic visualization and manipulation. Some of the useful topics reside below.
 ```
