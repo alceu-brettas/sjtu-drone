@@ -26,7 +26,7 @@ $ roslaunch sjtu-drone sjtu.launch
 In second terminal:
 
 ```
-$ rosrun sjtu_drone drone_keyboard
+$ rosrun sjtu-drone drone_keyboard
 ```
 
 
