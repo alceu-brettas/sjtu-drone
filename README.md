@@ -9,7 +9,7 @@ This package is compatible with ROS Noetic version (Ubuntu 20.04). Existing vers
 $ cd <catkin_ws>/src
 $ git clone https://github.com/alceu-brettas/sjtu-drone.git
 $ cd <catkin_ws>
-$ catkin build
+$ catkin_make
 ```
 
 Here <catkin_ws> is the path of the catkin workspace. Please refer to the [tutorial](http://wiki.ros.org/ROS/Tutorials) about how to create a catkin workspace in ROS.
